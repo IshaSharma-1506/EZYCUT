@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   getAllSalons,
   updateSalon,
@@ -250,16 +251,6 @@ const AdminSalons = () => {
               <p className="text-xs text-gray-400 max-w-sm">Registered salons will show up here once added to the platform.</p>
             </div>
           ) : (
-           <div className="p-6 pt-4">
-          {salons.length === 0 ? (
-            <div className="flex flex-col items-center text-center gap-3 py-14">
-              <div className="w-16 h-16 rounded-full bg-[#f7faf9] border border-gray-100 flex items-center justify-center">
-                <Store size={24} className="text-gray-300" />
-              </div>
-              <h4 className="font-bold text-gray-700 text-sm">No Salons Found</h4>
-              <p className="text-xs text-gray-400 max-w-sm">Registered salons will show up here once added to the platform.</p>
-            </div>
-          ) : (
             <div className="flex flex-col gap-3.5">
               {salons.map((s, i) => (
                 <div
@@ -353,29 +344,94 @@ const AdminSalons = () => {
             </div>
           )}
         </div>
-          )}
-        </div>
       </div>
 
-      {/* Reassign Owner Modal */}
-      {reassignModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1000] flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease]">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-[modalIn_0.25s_ease]">
-            <div className="pb-4 mb-4 border-b border-gray-100">
-              <h3 className="font-['Outfit'] text-lg font-extrabold text-gray-800">Reassign Salon Owner</h3>
-              <p className="text-xs text-gray-400 mt-0.5">Change the owner assigned to this salon profile</p>
-            </div>
+      {/* Reassign Owner Modal — rendered via portal so parent transforms/animations can't break `fixed` positioning */}
+      {reassignModalOpen &&
+        createPortal(
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1000] flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease]">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-[modalIn_0.25s_ease]">
+              <div className="pb-4 mb-4 border-b border-gray-100">
+                <h3 className="font-['Outfit'] text-lg font-extrabold text-gray-800">Reassign Salon Owner</h3>
+                <p className="text-xs text-gray-400 mt-0.5">Change the owner assigned to this salon profile</p>
+              </div>
 
-            <form onSubmit={submitReassignOwner} className="flex flex-col gap-5">
-              <div>
-                <label className="text-[0.8125rem] font-semibold text-gray-600 mb-2 block">Owner User ID</label>
+              <form onSubmit={submitReassignOwner} className="flex flex-col gap-5">
+                <div>
+                  <label className="text-[0.8125rem] font-semibold text-gray-600 mb-2 block">Owner User ID</label>
+                  <input
+                    type="text"
+                    value={targetOwnerId}
+                    onChange={(e) => setTargetOwnerId(e.target.value)}
+                    placeholder="e.g. 64b2fd9c8d19bc0012f4581a"
+                    required
+                    className={inputClass}
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setReassignModalOpen(false);
+                      setSelectedSalonId(null);
+                      setTargetOwnerId("");
+                    }}
+                    className="border border-gray-200 text-gray-600 text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={reassignLoading}
+                    className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-60 text-white font-bold text-sm px-5 py-2.5 rounded-lg transition-all duration-200"
+                  >
+                    {reassignLoading ? (
+                      <>
+                        <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      "Save Assignment"
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModalOpen &&
+        salonToDelete &&
+        createPortal(
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1000] flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease]">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-[modalIn_0.25s_ease]">
+              <div className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-100">
+                <div className="w-11 h-11 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center shrink-0">
+                  <ShieldAlert size={18} className="text-rose-500" />
+                </div>
+                <div>
+                  <h3 className="font-['Outfit'] text-lg font-extrabold text-rose-600">Delete Salon</h3>
+                  <p className="text-xs text-gray-400 mt-0.5">This action is permanent and cannot be reversed.</p>
+                </div>
+              </div>
+
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Are you sure you want to delete <strong className="text-gray-800">{salonToDelete.name}</strong>? All associated data will be permanently removed.
+              </p>
+
+              <div className="my-5">
+                <label className="text-[0.8125rem] font-semibold text-gray-600 mb-2 block">
+                  Type <strong className="text-rose-500">delete {salonToDelete.name}</strong> to confirm:
+                </label>
                 <input
                   type="text"
-                  value={targetOwnerId}
-                  onChange={(e) => setTargetOwnerId(e.target.value)}
-                  placeholder="e.g. 64b2fd9c8d19bc0012f4581a"
-                  required
-                  className={inputClass}
+                  value={confirmTypedText}
+                  onChange={(e) => setConfirmTypedText(e.target.value)}
+                  placeholder={`delete ${salonToDelete.name}`}
+                  className={`${inputClass} ${confirmTypedText === `delete ${salonToDelete.name}` ? "border-rose-300" : ""}`}
                 />
               </div>
 
@@ -383,161 +439,82 @@ const AdminSalons = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    setReassignModalOpen(false);
-                    setSelectedSalonId(null);
-                    setTargetOwnerId("");
+                    setDeleteModalOpen(false);
+                    setSalonToDelete(null);
+                    setConfirmTypedText("");
                   }}
                   className="border border-gray-200 text-gray-600 text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  disabled={reassignLoading}
-                  className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-60 text-white font-bold text-sm px-5 py-2.5 rounded-lg transition-all duration-200"
+                  type="button"
+                  onClick={submitDeleteSalon}
+                  disabled={confirmTypedText !== `delete ${salonToDelete.name}` || deleteLoading}
+                  className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm px-5 py-2.5 rounded-lg transition-all duration-200"
                 >
-                  {reassignLoading ? (
+                  {deleteLoading ? (
                     <>
                       <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Saving...
+                      Deleting...
                     </>
                   ) : (
-                    "Save Assignment"
+                    "Permanently Delete"
                   )}
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {deleteModalOpen && salonToDelete && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1000] flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease]">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-[modalIn_0.25s_ease]">
-            <div className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-100">
-              <div className="w-11 h-11 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center shrink-0">
-                <ShieldAlert size={18} className="text-rose-500" />
-              </div>
-              <div>
-                <h3 className="font-['Outfit'] text-lg font-extrabold text-rose-600">Delete Salon</h3>
-                <p className="text-xs text-gray-400 mt-0.5">This action is permanent and cannot be reversed.</p>
-              </div>
             </div>
-
-            <p className="text-sm text-gray-600 leading-relaxed">
-              Are you sure you want to delete <strong className="text-gray-800">{salonToDelete.name}</strong>? All associated data will be permanently removed.
-            </p>
-
-            <div className="my-5">
-              <label className="text-[0.8125rem] font-semibold text-gray-600 mb-2 block">
-                Type <strong className="text-rose-500">delete {salonToDelete.name}</strong> to confirm:
-              </label>
-              <input
-                type="text"
-                value={confirmTypedText}
-                onChange={(e) => setConfirmTypedText(e.target.value)}
-                placeholder={`delete ${salonToDelete.name}`}
-                className={`${inputClass} ${confirmTypedText === `delete ${salonToDelete.name}` ? "border-rose-300" : ""}`}
-              />
-            </div>
-
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
-              <button
-                type="button"
-                onClick={() => {
-                  setDeleteModalOpen(false);
-                  setSalonToDelete(null);
-                  setConfirmTypedText("");
-                }}
-                className="border border-gray-200 text-gray-600 text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={submitDeleteSalon}
-                disabled={confirmTypedText !== `delete ${salonToDelete.name}` || deleteLoading}
-                className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm px-5 py-2.5 rounded-lg transition-all duration-200"
-              >
-                {deleteLoading ? (
-                  <>
-                    <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Deleting...
-                  </>
-                ) : (
-                  "Permanently Delete"
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
 
       {/* KYC Document Review Modal */}
-      {kycModalOpen && selectedKyc && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[99999] flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease]">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 animate-[modalIn_0.25s_ease]">
-            <div className="flex justify-between items-start mb-6">
-              <div>
-                <h3 className="font-['Outfit'] text-lg font-extrabold text-gray-800">KYC Document Review</h3>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  Verify identity and business proofs for {selectedKyc.salon?.name || "this salon"}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setKycModalOpen(false);
-                  setSelectedKyc(null);
-                }}
-                className="p-2 border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors"
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            <div className="flex flex-col gap-5">
-              {/* Owner Info Block */}
-              <div className="bg-[#f7fdfc] border border-gray-100 rounded-xl p-4">
-                <p className="text-[0.7rem] text-gray-500 uppercase tracking-wide font-bold mb-3">Owner Information</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                  <div><span className="text-gray-500">Name:</span> <strong className="text-black">{selectedKyc.owner?.name}</strong></div>
-                  <div><span className="text-gray-500">Email:</span> <span className="text-black">{selectedKyc.owner?.email}</span></div>
-                  <div><span className="text-gray-500">Phone:</span> <span className="text-black">{selectedKyc.owner?.phone}</span></div>
-                  <div><span className="text-gray-500">City:</span> <span className="text-black">{selectedKyc.salon?.city}</span></div>
-                </div>
-              </div>
-
-              {/* ID Proof Document */}
-              <div className="bg-[#f7fdfc] border border-gray-100 rounded-xl p-4 flex justify-between items-center">
+      {kycModalOpen &&
+        selectedKyc &&
+        createPortal(
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[99999] flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease]">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 animate-[modalIn_0.25s_ease]">
+              <div className="flex justify-between items-start mb-6">
                 <div>
-                  <p className="text-[0.7rem] text-gray-500 uppercase tracking-wide mb-1">Identity Proof</p>
-                  <p className="font-semibold text-black text-sm">
-                    {selectedKyc.ownerIdProofType ? selectedKyc.ownerIdProofType.toUpperCase() : "Document"}
+                  <h3 className="font-['Outfit'] text-lg font-extrabold text-gray-800">KYC Document Review</h3>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    Verify identity and business proofs for {selectedKyc.salon?.name || "this salon"}
                   </p>
                 </div>
-                <a
-                  href={selectedKyc.ownerIdProof}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs px-3.5 py-2 rounded-lg transition-colors"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setKycModalOpen(false);
+                    setSelectedKyc(null);
+                  }}
+                  className="p-2 border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors"
                 >
-                  <Eye size={13} /> View File
-                </a>
+                  <X size={16} />
+                </button>
               </div>
 
-              {/* Business Proof Document */}
-              {selectedKyc.businessProof && (
+              <div className="flex flex-col gap-5">
+                {/* Owner Info Block */}
+                <div className="bg-[#f7fdfc] border border-gray-100 rounded-xl p-4">
+                  <p className="text-[0.7rem] text-gray-500 uppercase tracking-wide font-bold mb-3">Owner Information</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    <div><span className="text-gray-500">Name:</span> <strong className="text-black">{selectedKyc.owner?.name}</strong></div>
+                    <div><span className="text-gray-500">Email:</span> <span className="text-black">{selectedKyc.owner?.email}</span></div>
+                    <div><span className="text-gray-500">Phone:</span> <span className="text-black">{selectedKyc.owner?.phone}</span></div>
+                    <div><span className="text-gray-500">City:</span> <span className="text-black">{selectedKyc.salon?.city}</span></div>
+                  </div>
+                </div>
+
+                {/* ID Proof Document */}
                 <div className="bg-[#f7fdfc] border border-gray-100 rounded-xl p-4 flex justify-between items-center">
                   <div>
-                    <p className="text-[0.7rem] text-gray-500 uppercase tracking-wide mb-1">Business Proof</p>
+                    <p className="text-[0.7rem] text-gray-500 uppercase tracking-wide mb-1">Identity Proof</p>
                     <p className="font-semibold text-black text-sm">
-                      {selectedKyc.businessProofType ? selectedKyc.businessProofType.toUpperCase() : "Document"}
+                      {selectedKyc.ownerIdProofType ? selectedKyc.ownerIdProofType.toUpperCase() : "Document"}
                     </p>
                   </div>
                   <a
-                    href={selectedKyc.businessProof}
+                    href={selectedKyc.ownerIdProof}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs px-3.5 py-2 rounded-lg transition-colors"
@@ -545,76 +522,96 @@ const AdminSalons = () => {
                     <Eye size={13} /> View File
                   </a>
                 </div>
-              )}
 
-              {/* Salon Photos Section */}
-              {selectedKyc.salonImages && selectedKyc.salonImages.length > 0 && (
-                <div className="bg-[#f7fdfc] border border-gray-100 rounded-xl p-4">
-                  <p className="text-[0.7rem] text-gray-500 uppercase tracking-wide font-bold mb-3">Salon Photos</p>
-                  <div className="flex gap-2 flex-wrap">
-                    {selectedKyc.salonImages.map((img, idx) => (
-                      <a key={idx} href={img} target="_blank" rel="noopener noreferrer">
-                        <img
-                          src={img}
-                          alt={`Salon Photo ${idx + 1}`}
-                          className="w-20 h-20 object-cover rounded-lg border border-gray-200 hover:opacity-80 transition-opacity"
-                        />
-                      </a>
-                    ))}
+                {/* Business Proof Document */}
+                {selectedKyc.businessProof && (
+                  <div className="bg-[#f7fdfc] border border-gray-100 rounded-xl p-4 flex justify-between items-center">
+                    <div>
+                      <p className="text-[0.7rem] text-gray-500 uppercase tracking-wide mb-1">Business Proof</p>
+                      <p className="font-semibold text-black text-sm">
+                        {selectedKyc.businessProofType ? selectedKyc.businessProofType.toUpperCase() : "Document"}
+                      </p>
+                    </div>
+                    <a
+                      href={selectedKyc.businessProof}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs px-3.5 py-2 rounded-lg transition-colors"
+                    >
+                      <Eye size={13} /> View File
+                    </a>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* KYC Decisions Block */}
-              {selectedKyc.kycStatus === "pending" ? (
-                <div className="flex flex-col gap-4 mt-1">
-                  <button
-                    type="button"
-                    onClick={() => handleKycApprove(selectedKyc._id)}
-                    disabled={actionLoading}
-                    className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white font-bold text-sm py-3 rounded-xl transition-colors"
-                  >
-                    <Check size={15} />
-                    {actionLoading ? "Processing..." : "Approve KYC"}
-                  </button>
+                {/* Salon Photos Section */}
+                {selectedKyc.salonImages && selectedKyc.salonImages.length > 0 && (
+                  <div className="bg-[#f7fdfc] border border-gray-100 rounded-xl p-4">
+                    <p className="text-[0.7rem] text-gray-500 uppercase tracking-wide font-bold mb-3">Salon Photos</p>
+                    <div className="flex gap-2 flex-wrap">
+                      {selectedKyc.salonImages.map((img, idx) => (
+                        <a key={idx} href={img} target="_blank" rel="noopener noreferrer">
+                          <img
+                            src={img}
+                            alt={`Salon Photo ${idx + 1}`}
+                            className="w-20 h-20 object-cover rounded-lg border border-gray-200 hover:opacity-80 transition-opacity"
+                          />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-                  <div className="border-t border-gray-100 pt-4">
-                    <label className="text-[0.8125rem] text-rose-500 font-semibold block mb-2">
-                      Rejection Reason (required to reject):
-                    </label>
-                    <textarea
-                      value={rejectReason}
-                      onChange={(e) => setRejectReason(e.target.value)}
-                      rows="2"
-                      placeholder="Specify why documents are rejected..."
-                      className={`${inputClass} font-sans mb-3 resize-y`}
-                    />
+                {/* KYC Decisions Block */}
+                {selectedKyc.kycStatus === "pending" ? (
+                  <div className="flex flex-col gap-4 mt-1">
                     <button
                       type="button"
-                      onClick={() => handleKycReject(selectedKyc._id)}
-                      disabled={actionLoading || !rejectReason.trim()}
-                      className="flex items-center justify-center gap-2 w-full bg-rose-600 hover:bg-rose-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm py-3 rounded-xl transition-colors"
+                      onClick={() => handleKycApprove(selectedKyc._id)}
+                      disabled={actionLoading}
+                      className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white font-bold text-sm py-3 rounded-xl transition-colors"
                     >
-                      <Ban size={15} />
-                      Reject KYC
+                      <Check size={15} />
+                      {actionLoading ? "Processing..." : "Approve KYC"}
                     </button>
+
+                    <div className="border-t border-gray-100 pt-4">
+                      <label className="text-[0.8125rem] text-rose-500 font-semibold block mb-2">
+                        Rejection Reason (required to reject):
+                      </label>
+                      <textarea
+                        value={rejectReason}
+                        onChange={(e) => setRejectReason(e.target.value)}
+                        rows="2"
+                        placeholder="Specify why documents are rejected..."
+                        className={`${inputClass} font-sans mb-3 resize-y`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleKycReject(selectedKyc._id)}
+                        disabled={actionLoading || !rejectReason.trim()}
+                        className="flex items-center justify-center gap-2 w-full bg-rose-600 hover:bg-rose-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm py-3 rounded-xl transition-colors"
+                      >
+                        <Ban size={15} />
+                        Reject KYC
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div
-                  className={`text-center py-3 rounded-xl font-bold text-sm border ${
-                    selectedKyc.kycStatus === "approved"
-                      ? "bg-emerald-50 border-emerald-100 text-emerald-600"
-                      : "bg-rose-50 border-rose-100 text-rose-600"
-                  }`}
-                >
-                  KYC STATUS: {selectedKyc.kycStatus ? selectedKyc.kycStatus.toUpperCase() : ""}
-                </div>
-              )}
+                ) : (
+                  <div
+                    className={`text-center py-3 rounded-xl font-bold text-sm border ${
+                      selectedKyc.kycStatus === "approved"
+                        ? "bg-emerald-50 border-emerald-100 text-emerald-600"
+                        : "bg-rose-50 border-rose-100 text-rose-600"
+                    }`}
+                  >
+                    KYC STATUS: {selectedKyc.kycStatus ? selectedKyc.kycStatus.toUpperCase() : ""}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 };

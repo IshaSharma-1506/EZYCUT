@@ -47,6 +47,8 @@ import OwnerLayout from "../components/layout/OwnerLayout";
 import AdminLayout from "../components/layout/AdminLayout";
 import AboutUs from "../pages/public/AboutUs";
 import PartnerWithUs from "../pages/public/PartnerWithUs";
+import PolicyPages from "../pages/public/PolicyPages";
+import Sitemap from "../pages/public/Sitemap";
 
 const AppRoutes = () => {
   return (
@@ -62,6 +64,8 @@ const AppRoutes = () => {
           <Route path="/about" element={<AboutUs />} />
          <Route path="/partner-with-us" element={<PartnerWithUs />} />   
           <Route path="/terms" element={<Terms />} />
+          <Route path="/policy" element={<PolicyPages />} />
+          <Route path="/sitemap" element={<Sitemap />}/>
         </Route>
 
         {/* Auth routes (no Navbar/Footer layout) */}

@@ -36,8 +36,8 @@ const quickLinks = [
   { to: "/about", label: "About Us" },
   { to: "/salons", label: "Services" },
   { to: "/partner-with-us", label: "Partner With Us" },
-  { to: "/faqs", label: "FAQs" },
   { to: "/terms", label: "Terms & Conditions" },
+  {to: "/policy", label: "FAQs & Policies"}
 ];
 
 const Footer = () => {
@@ -172,7 +172,7 @@ const Footer = () => {
         <div className="flex flex-wrap items-center justify-between gap-3 pt-5 border-t border-white/[0.06] text-xs text-[#71717a]">
           <span>© 2026 EzyCut. All rights reserved. Made for elite grooming experiences.</span>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
-            <Link to="/privacy-policy" className="hover:text-white transition-colors duration-150">
+            <Link to="/policy" className="hover:text-white transition-colors duration-150">
               Privacy Policy
             </Link>
             <Link to="/terms" className="hover:text-white transition-colors duration-150">
