@@ -13,6 +13,7 @@ import {
   LogOut,
   User,
   ShieldCheck,
+  X,
 } from "lucide-react";
 import useAuthStore from "../../store/auth.store";
 import logo from "../../assets/ezycut-icon.png";
@@ -36,7 +37,7 @@ const adminLinks = [
   { name: "KYC Review", path: "/admin/kyc", icon: ShieldCheck },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ isMobileOpen = false, onMobileClose = () => {} }) => {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
@@ -65,9 +66,25 @@ const Sidebar = () => {
     }`;
 
   return (
-    <aside className="w-[260px] min-w-[260px] h-screen sticky top-0 flex flex-col bg-white border-r border-gray-200 shadow-[1px_0_0_rgba(0,0,0,0.02)] overflow-hidden">
-    {/* Brand */}
-<div className="px-5 pt-6 pb-5 border-b border-gray-100 flex items-center gap-3">
+    <aside
+      className={`fixed inset-y-0 left-0 z-[60] w-[86vw] max-w-[280px] h-screen flex flex-col bg-white border-r border-gray-200 shadow-xl overflow-hidden transition-transform duration-300 md:sticky md:translate-x-0 md:w-[260px] md:min-w-[260px] md:shadow-[1px_0_0_rgba(0,0,0,0.02)] ${
+        isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+      }`}
+    >
+      <div className="flex items-center justify-between px-3 pt-3 md:hidden">
+        <span className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-gray-400">Menu</span>
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          className="rounded-lg p-2 text-gray-500 hover:bg-gray-100"
+          onClick={onMobileClose}
+        >
+          <X size={16} />
+        </button>
+      </div>
+
+      {/* Brand */}
+      <div className="px-5 pt-4 pb-5 border-b border-gray-100 flex items-center gap-3">
   <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shrink-0 overflow-hidden">
     <img src={logo} alt="EzyCut" className="w-full h-full object-contain scale-125" />
   </div>
@@ -89,7 +106,7 @@ const Sidebar = () => {
         </span>
         <div className="flex flex-col gap-1">
           {links.map(({ name, path, icon: Icon }) => (
-            <NavLink key={path} to={path} className={linkClass}>
+            <NavLink key={path} to={path} className={linkClass} onClick={onMobileClose}>
               {({ isActive }) => (
                 <>
                   <span className={iconWrapClass(isActive)}>
@@ -108,7 +125,7 @@ const Sidebar = () => {
 
         <div className="h-px bg-gray-100 my-3" />
 
-        <NavLink to="/" className={linkClass}>
+        <NavLink to="/" className={linkClass} onClick={onMobileClose}>
           {({ isActive }) => (
             <>
               <span className={iconWrapClass(isActive)}>

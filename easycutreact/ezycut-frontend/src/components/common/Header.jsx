@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { LogOut, Plus, ChevronDown } from "lucide-react";
+import { LogOut, Plus, ChevronDown, Menu } from "lucide-react";
 import useAuthStore from "../../store/auth.store";
 import useSalonStore from "../../store/salon.store";
 
-const Header = ({ title }) => {
+const Header = ({ title, onMenuToggle }) => {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
@@ -41,8 +41,17 @@ const Header = ({ title }) => {
   };
 
   return (
-    <header className="h-16 sm:h-[68px] bg-white border-b border-gray-100 px-4 sm:px-8 flex items-center justify-between gap-4 sticky top-0 z-50 shadow-sm">
-      <div className="flex items-center gap-4 min-w-0">
+    <header className="h-16 sm:h-17 bg-white border-b border-gray-100 px-4 sm:px-8 flex items-center justify-between gap-3 sticky top-0 z-50 shadow-sm">
+      <div className="flex items-center gap-3 min-w-0">
+        <button
+          type="button"
+          aria-label="Open sidebar"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 md:hidden"
+          onClick={onMenuToggle}
+        >
+          <Menu size={18} />
+        </button>
+
         <h1 className="text-base sm:text-lg font-extrabold text-gray-800 tracking-tight truncate">{title}</h1>
 
         {isOwner && (
@@ -74,7 +83,7 @@ const Header = ({ title }) => {
 
             <button
               onClick={() => navigate("/owner/dashboard?register=true")}
-              className="inline-flex items-center gap-1.5 bg-[#0d9488] hover:bg-[#0f766e] text-white font-bold text-xs px-3.5 py-2 rounded-lg shadow-sm transition-colors"
+              className="inline-flex items-center gap-1.5 bg-linear-to-br from-[#0d9488] to-[#0f766e] text-white font-bold text-xs px-3.5 py-2 rounded-lg shadow-sm transition-colors"
             >
               <Plus size={14} /> Register Salon
             </button>

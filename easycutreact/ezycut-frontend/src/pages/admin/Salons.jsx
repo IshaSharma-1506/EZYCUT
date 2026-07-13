@@ -185,7 +185,7 @@ const AdminSalons = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-24">
+      <div className="flex items-center justify-center py-20 sm:py-24">
         <span className="w-9 h-9 border-[3px] border-[#0d9488]/20 border-t-[#0d9488] rounded-full animate-spin" />
       </div>
     );
@@ -193,7 +193,7 @@ const AdminSalons = () => {
 
   if (error) {
     return (
-      <div className="flex items-center gap-3 bg-rose-50 border border-rose-100 text-rose-600 font-semibold text-sm px-5 py-4 rounded-xl">
+      <div className="flex items-center gap-3 bg-rose-50 border border-rose-100 text-rose-600 font-semibold text-sm px-4 sm:px-5 py-4 rounded-xl">
         <AlertCircle size={18} className="shrink-0" />
         {error}
       </div>
@@ -205,7 +205,7 @@ const AdminSalons = () => {
       {/* Page Header */}
       <div
         {...fadeUp(0)}
-        className={`${fadeUp(0).className} relative overflow-hidden rounded-2xl p-7 md:p-8 bg-gradient-to-br from-[#0f766e] to-[#042f2e] border border-[#0d9488]/20 flex items-center justify-between gap-4 flex-wrap`}
+        className={`${fadeUp(0).className} relative overflow-hidden rounded-3xl p-5 sm:p-7 lg:p-8 bg-linear-to-br from-[#0f766e] to-[#042f2e] border border-[#0d9488]/20 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between`}
       >
         <svg className="absolute inset-0 w-full h-full opacity-[0.12]" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -217,33 +217,33 @@ const AdminSalons = () => {
         </svg>
         <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-[radial-gradient(circle,rgba(94,234,212,0.22)_0%,transparent_70%)] pointer-events-none" />
 
-        <div className="relative flex items-center gap-4">
+        <div className="relative flex items-start gap-4">
           <div className="w-14 h-14 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
             <Store size={24} className="text-white" />
           </div>
           <div>
-            <h1 className="font-['Outfit'] text-xl md:text-2xl font-extrabold text-white tracking-[-0.02em]">
+            <h1 className="font-['Outfit'] text-xl sm:text-2xl font-extrabold text-white tracking-[-0.02em]">
               Salons Controller
             </h1>
             <p className="text-white/70 text-sm mt-1">Audit platform salon profiles, approvals, and ownership mappings</p>
           </div>
         </div>
 
-        <span className="relative inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-white text-xs font-extrabold uppercase tracking-wide px-3.5 py-2 rounded-full">
+        <span className="relative inline-flex self-start items-center gap-1.5 bg-white/10 border border-white/20 text-white text-xs font-extrabold uppercase tracking-wide px-3.5 py-2 rounded-full">
           {salons.length} Salons
         </span>
       </div>
 
       {/* Salons Table */}
       <div {...fadeUp(80)} className={`${fadeUp(80).className} bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden`}>
-        <div className="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-[#f7fdfc] to-white">
+        <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-100 bg-linear-to-r from-[#f7fdfc] to-white">
           <h3 className="font-['Outfit'] text-base font-bold text-[#042f2e]">Registered Salons</h3>
           <p className="text-xs text-gray-400 mt-1">Manage approval status and ownership assignments</p>
         </div>
 
-        <div className="p-6 pt-4">
+        <div className="p-4 sm:p-6 sm:pt-4">
           {salons.length === 0 ? (
-            <div className="flex flex-col items-center text-center gap-3 py-14">
+            <div className="flex flex-col items-center text-center gap-3 py-12 sm:py-14">
               <div className="w-16 h-16 rounded-full bg-[#f7faf9] border border-gray-100 flex items-center justify-center">
                 <Store size={24} className="text-gray-300" />
               </div>
@@ -256,9 +256,9 @@ const AdminSalons = () => {
                 <div
                   key={s._id}
                   {...fadeUp(120 + i * 30)}
-                  className={`${fadeUp(120 + i * 30).className} bg-slate-50 border border-slate-200 rounded-xl p-5 hover:bg-slate-100 hover:border-teal-300 hover:shadow-[0_6px_18px_rgba(15,118,110,0.1)] transition-all duration-200`}
+                  className={`${fadeUp(120 + i * 30).className} bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 hover:bg-slate-100 hover:border-teal-300 hover:shadow-[0_6px_18px_rgba(15,118,110,0.1)] transition-all duration-200`}
                 >
-                  <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4 mb-4">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-11 h-11 rounded-xl bg-[#f0fdfa] border border-[#ccfbf1] flex items-center justify-center shrink-0 text-[#0f766e] font-extrabold">
                         {s.name?.charAt(0)?.toUpperCase()}
@@ -283,7 +283,7 @@ const AdminSalons = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
                     <div>
                       <p className="text-[0.65rem] font-bold text-gray-400 uppercase tracking-wide mb-1">Address</p>
                       <p className="text-sm text-black">{s.address}</p>
@@ -325,16 +325,16 @@ const AdminSalons = () => {
                     </div>
                   </div>
 
-                  <div className="flex justify-end gap-2 pt-3 border-t border-gray-50">
+                  <div className="flex flex-col-reverse gap-2 pt-3 border-t border-gray-50 sm:flex-row sm:justify-end">
                     <button
                       onClick={() => handleReassignOwner(s._id)}
-                      className="inline-flex items-center gap-1 border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold text-xs px-3 py-1.5 rounded-lg transition-colors"
+                      className="inline-flex items-center justify-center gap-1 border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold text-xs px-3 py-1.5 rounded-lg transition-colors w-full sm:w-auto"
                     >
                       Reassign Owner
                     </button>
                     <button
                       onClick={() => handleOpenDeleteModal(s)}
-                      className="inline-flex items-center gap-1 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs px-3 py-1.5 rounded-lg transition-colors"
+                      className="inline-flex items-center justify-center gap-1 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs px-3 py-1.5 rounded-lg transition-colors w-full sm:w-auto"
                     >
                       Delete
                     </button>
@@ -472,8 +472,8 @@ const AdminSalons = () => {
       {kycModalOpen &&
         selectedKyc &&
         createPortal(
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[99999] flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease]">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 animate-[modalIn_0.25s_ease]">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-99999 flex items-center justify-center p-2 sm:p-4 animate-[fadeIn_0.2s_ease]">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-[min(92vw,44rem)] max-h-[90vh] overflow-y-auto p-4 sm:p-6 animate-[modalIn_0.25s_ease]">
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h3 className="font-['Outfit'] text-lg font-extrabold text-gray-800">KYC Document Review</h3>
