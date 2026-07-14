@@ -37,29 +37,29 @@ const quickLinks = [
   { to: "/salons", label: "Services" },
   { to: "/partner-with-us", label: "Partner With Us" },
   { to: "/terms", label: "Terms & Conditions" },
-  {to: "/policy", label: "FAQs & Policies"}
+  { to: "/policy", label: "FAQs & Policies" },
 ];
 
 const Footer = () => {
   return (
     <footer
-      className="relative overflow-hidden bg-gradient-to-b from-[#0a0a0a] to-[#050505] text-[#a1a1aa] pt-12 pb-6 border-t border-white/10"
+      className="relative overflow-hidden bg-gradient-to-b from-[#0a0a0a] to-[#050505] text-[#a1a1aa] pt-10 sm:pt-12 pb-5 sm:pb-6 border-t border-white/10"
     >
       {/* ambient glow accents */}
-      <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(13,148,136,0.1)_0%,transparent_70%)] pointer-events-none" />
-      <div className="absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(13,148,136,0.07)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute -top-24 -left-24 w-56 h-56 sm:w-72 sm:h-72 rounded-full bg-[radial-gradient(circle,rgba(13,148,136,0.1)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute -bottom-24 -right-24 w-56 h-56 sm:w-72 sm:h-72 rounded-full bg-[radial-gradient(circle,rgba(13,148,136,0.07)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="page-container relative">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1.1fr] gap-8 pb-8">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1.1fr] gap-7 sm:gap-8 pb-6 sm:pb-8">
           {/* Brand & Description */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3.5 sm:gap-4 xs:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2.5">
               <img
                 src={ezycutIcon}
                 alt="EzyCut logo"
-                className="w-8 h-8 object-contain drop-shadow-[0_0_10px_rgba(13,148,136,0.35)]"
+                className="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow-[0_0_10px_rgba(13,148,136,0.35)]"
               />
-              <span className="text-lg font-extrabold text-white tracking-[-0.02em]">
+              <span className="text-base sm:text-lg font-extrabold text-white tracking-[-0.02em]">
                 EZY<span className="text-[#2dd4bf]">CUT</span>
               </span>
             </div>
@@ -80,7 +80,7 @@ const Footer = () => {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.07] text-[#a1a1aa] flex items-center justify-center transition-all duration-200 hover:bg-[#0d9488]/15 hover:border-[#0d9488]/40 hover:text-[#2dd4bf] hover:-translate-y-0.5"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/[0.04] border border-white/[0.07] text-[#a1a1aa] flex items-center justify-center transition-all duration-200 hover:bg-[#0d9488]/15 hover:border-[#0d9488]/40 hover:text-[#2dd4bf] hover:-translate-y-0.5"
                 >
                   {icon}
                 </a>
@@ -90,10 +90,10 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-bold text-xs mb-3.5 uppercase tracking-[0.08em]">
+            <h4 className="text-white font-bold text-[0.6875rem] sm:text-xs mb-3 sm:mb-3.5 uppercase tracking-[0.08em]">
               Quick Links
             </h4>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 sm:gap-2">
               {quickLinks.map(({ to, label }) => (
                 <Link
                   key={label}
@@ -108,32 +108,32 @@ const Footer = () => {
 
           {/* Features */}
           <div>
-            <h4 className="text-white font-bold text-xs mb-3.5 uppercase tracking-[0.08em]">
+            <h4 className="text-white font-bold text-[0.6875rem] sm:text-xs mb-3 sm:mb-3.5 uppercase tracking-[0.08em]">
               Features
             </h4>
             <div className="flex flex-col gap-2 text-[0.8125rem] text-[#8b8b93]">
               <span className="flex items-center gap-2">
-                <span className="w-1 h-1 rounded-full bg-[#2dd4bf]" />
+                <span className="w-1 h-1 rounded-full bg-[#2dd4bf] shrink-0" />
                 Smart Salon Scheduling
               </span>
               <span className="flex items-center gap-2">
-                <span className="w-1 h-1 rounded-full bg-[#2dd4bf]" />
+                <span className="w-1 h-1 rounded-full bg-[#2dd4bf] shrink-0" />
                 Real-time Token System
               </span>
               <span className="flex items-center gap-2">
-                <span className="w-1 h-1 rounded-full bg-[#2dd4bf]" />
+                <span className="w-1 h-1 rounded-full bg-[#2dd4bf] shrink-0" />
                 Contactless Payment
               </span>
               <span className="flex items-center gap-2">
-                <span className="w-1 h-1 rounded-full bg-[#2dd4bf]" />
+                <span className="w-1 h-1 rounded-full bg-[#2dd4bf] shrink-0" />
                 Verified Customer Reviews
               </span>
             </div>
           </div>
 
           {/* Contact */}
-          <div>
-            <h4 className="text-white font-bold text-xs mb-3.5 uppercase tracking-[0.08em]">
+          <div className="xs:col-span-2 lg:col-span-1">
+            <h4 className="text-white font-bold text-[0.6875rem] sm:text-xs mb-3 sm:mb-3.5 uppercase tracking-[0.08em]">
               Contact
             </h4>
             <div className="flex flex-col gap-2.5 text-[0.8125rem] text-[#8b8b93]">
@@ -143,13 +143,13 @@ const Footer = () => {
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone size={14} className="text-[#2dd4bf] shrink-0" />
-                <a href="tel:+919476363907" className="hover:text-[#2dd4bf] transition-colors duration-150">
+                <a href="tel:+919476363907" className="hover:text-[#2dd4bf] transition-colors duration-150 break-all">
                   +91 94763 63907
                 </a>
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail size={14} className="text-[#2dd4bf] shrink-0" />
-                <a href="mailto:support@ezycut.com" className="hover:text-[#2dd4bf] transition-colors duration-150">
+                <a href="mailto:support@ezycut.com" className="hover:text-[#2dd4bf] transition-colors duration-150 break-all">
                   support@ezycut.com
                 </a>
               </div>
@@ -159,7 +159,7 @@ const Footer = () => {
                   href="https://www.ezycut.co.in"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-[#2dd4bf] transition-colors duration-150"
+                  className="hover:text-[#2dd4bf] transition-colors duration-150 break-all"
                 >
                   www.ezycut.co.in
                 </a>
@@ -169,16 +169,16 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-5 border-t border-white/[0.06] text-xs text-[#71717a]">
-          <span>© 2026 EzyCut. All rights reserved. Made for elite grooming experiences.</span>
-          <div className="flex flex-wrap gap-x-5 gap-y-2">
-            <Link to="/policy" className="hover:text-white transition-colors duration-150">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-3 pt-5 border-t border-white/[0.06] text-[0.6875rem] sm:text-xs text-[#71717a]">
+          <span className="leading-relaxed">© 2026 EzyCut. All rights reserved. Made for elite grooming experiences.</span>
+          <div className="flex flex-wrap gap-x-4 sm:gap-x-5 gap-y-2">
+            <Link to="/policy" className="hover:text-white transition-colors duration-150 whitespace-nowrap">
               Privacy Policy
             </Link>
-            <Link to="/terms" className="hover:text-white transition-colors duration-150">
+            <Link to="/terms" className="hover:text-white transition-colors duration-150 whitespace-nowrap">
               Terms of Service
             </Link>
-            <Link to="/sitemap" className="hover:text-white transition-colors duration-150">
+            <Link to="/sitemap" className="hover:text-white transition-colors duration-150 whitespace-nowrap">
               Sitemap
             </Link>
           </div>

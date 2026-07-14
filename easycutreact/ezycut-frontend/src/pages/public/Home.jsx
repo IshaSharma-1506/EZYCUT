@@ -89,93 +89,99 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] overflow-x-hidden pb-10">
       {/* ============ HERO VIDEO SLIDESHOW ============ */}
-      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-[#09090b]">
+<section className="relative w-full h-[100svh] min-h-[560px] max-h-[900px] overflow-hidden bg-[#09090b]">
+  {/* Background video slides */}
+  {slides.map((slide, index) => (
+    <div
+      key={index}
+      className={`absolute inset-0 transition-opacity duration-[1400ms] ease-in-out ${
+        index === activeSlide ? "opacity-100 z-[1]" : "opacity-0 z-0"
+      }`}
+    >
+      <video
+        className="w-full h-full object-cover absolute inset-0 animate-[ezcKenBurns_12s_ease-in-out_infinite_alternate]"
+        src={slide.video}
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-[rgba(9,9,11,0.8)] via-[rgba(9,20,17,0.55)] to-[rgba(9,9,11,0.9)]" />
+    </div>
+  ))}
+
+  <div className="absolute -bottom-[150px] -left-[150px] w-[300px] h-[300px] sm:w-[450px] sm:h-[450px] md:w-[600px] md:h-[600px] rounded-full bg-[radial-gradient(circle,rgba(111,148,131,0.18)_0%,transparent_70%)] pointer-events-none z-[2]" />
+
+  {/* Text content overlay — sits ON TOP of the video, never pushes section height */}
+  <div className="absolute inset-0 z-[3] flex flex-col justify-center pointer-events-none">
+    <div className="w-full px-5 sm:px-8 md:px-12 lg:px-20 max-w-screen-2xl mx-auto flex flex-col items-start text-left gap-4 sm:gap-6 md:gap-7">
+      <div className="relative w-full max-w-[90%] sm:max-w-[520px] md:max-w-[620px] lg:max-w-[700px] min-h-[190px] xs:min-h-[210px] sm:min-h-[260px] md:min-h-[300px] lg:min-h-[340px]">
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-[1400ms] ease-in-out ${
-              index === activeSlide ? "opacity-100 z-[1]" : "opacity-0 z-0"
+            className={`absolute inset-0 flex flex-col items-start text-left justify-center gap-3 sm:gap-4 md:gap-5 transition-opacity duration-[900ms] ease-in-out pointer-events-auto ${
+              index === activeSlide ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
             }`}
           >
-            <video
-              className="w-full h-full object-cover absolute inset-0 animate-[ezcKenBurns_12s_ease-in-out_infinite_alternate]"
-              src={slide.video}
-              autoPlay
-              muted
-              loop
-              playsInline
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-[rgba(9,9,11,0.8)] via-[rgba(9,20,17,0.55)] to-[rgba(9,9,11,0.9)]" />
+            <div className="inline-flex items-center gap-2 bg-[rgba(111,148,131,0.12)] border border-[rgba(111,148,131,0.35)] rounded-full px-3 py-1.5 text-[0.625rem] sm:text-[0.6875rem] font-semibold text-[#a3c4b3] uppercase tracking-[0.08em] backdrop-blur-[8px] animate-[ezcFadeUp_0.8s_ease_both]">
+              <Scissors size={12} />
+              {slide.badge}
+            </div>
+            <h1 className="text-[clamp(1.5rem,6vw,3.25rem)] font-extrabold text-white tracking-[-0.02em] leading-[1.2] m-0 [text-shadow:0_6px_24px_rgba(0,0,0,0.55),0_2px_8px_rgba(0,0,0,0.4)] animate-[ezcFadeUp_0.9s_ease_0.1s_both]">
+              {slide.title} <br />
+              <span className="bg-gradient-to-r from-[#6f9483] to-[#a3c4b3] bg-clip-text text-transparent [text-shadow:none]">
+                {slide.highlight}
+              </span>
+            </h1>
+            <p className="text-sm sm:text-base text-[rgba(244,244,245,0.8)] max-w-[90%] sm:max-w-[480px] md:max-w-[520px] leading-relaxed m-0 animate-[ezcFadeUp_1s_ease_0.2s_both]">
+              {slide.desc}
+            </p>
           </div>
         ))}
+      </div>
 
-        <div className="absolute -bottom-[150px] -left-[150px] w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(111,148,131,0.18)_0%,transparent_70%)] pointer-events-none z-[2]" />
+      <div className="relative z-[4] mt-2 sm:mt-4 md:mt-6 pointer-events-auto">
+        {token ? (
+          <Link
+            to="/salons"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4d6c5c] to-[#6f9483] text-white font-bold text-sm sm:text-base px-5 sm:px-7 py-3 sm:py-3.5 rounded-xl no-underline shadow-[0_8px_24px_rgba(77,108,92,0.35)] transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(77,108,92,0.45)]"
+          >
+            Explore Salons <ArrowRight size={18} />
+          </Link>
+        ) : (
+          <Link
+            to="/register"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4d6c5c] to-[#6f9483] text-white font-bold text-sm sm:text-base px-5 sm:px-7 py-3 sm:py-3.5 rounded-xl no-underline shadow-[0_8px_24px_rgba(77,108,92,0.35)] transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(77,108,92,0.45)]"
+          >
+            Join EzyCut <ArrowRight size={18} />
+          </Link>
+        )}
+      </div>
+    </div>
+  </div>
 
-        <div className="page-container relative z-[3] flex flex-col items-start text-left gap-7 w-full">
-          <div className="relative w-full max-w-[700px] min-h-[280px] sm:min-h-[300px] md:min-h-[340px]">
-            {slides.map((slide, index) => (
-              <div
-                key={index}
-                className={`absolute inset-0 flex flex-col items-start text-left justify-center gap-5 transition-opacity duration-[900ms] ease-in-out ${
-                  index === activeSlide ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-                }`}
-              >
-                <div className="inline-flex items-center gap-2 bg-[rgba(111,148,131,0.12)] border border-[rgba(111,148,131,0.35)] rounded-full px-[0.85rem] py-[0.35rem] text-[0.6875rem] font-semibold text-[#a3c4b3] uppercase tracking-[0.08em] backdrop-blur-[8px] animate-[ezcFadeUp_0.8s_ease_both]">
-                  <Scissors size={12} />
-                  {slide.badge}
-                </div>
-                <h1 className="text-[clamp(1.875rem,4vw,3.25rem)] font-extrabold text-white tracking-[-0.02em] leading-[1.2] m-0 [text-shadow:0_6px_24px_rgba(0,0,0,0.55),0_2px_8px_rgba(0,0,0,0.4)] animate-[ezcFadeUp_0.9s_ease_0.1s_both]">
-                  {slide.title} <br />
-                  <span className="bg-gradient-to-r from-[#6f9483] to-[#a3c4b3] bg-clip-text text-transparent [text-shadow:none]">
-                    {slide.highlight}
-                  </span>
-                </h1>
-                <p className="text-base text-[rgba(244,244,245,0.8)] max-w-[520px] leading-relaxed m-0 animate-[ezcFadeUp_1s_ease_0.2s_both]">
-                  {slide.desc}
-                </p>
-              </div>
-            ))}
-          </div>
+  {/* Slide dots */}
+  <div className="absolute left-1/2 -translate-x-1/2 bottom-6 sm:bottom-9 flex gap-2 z-[4] pointer-events-auto">
+    {slides.map((_, index) => (
+      <button
+        key={index}
+        className={`rounded-full border-none cursor-pointer transition-all duration-300 p-0 ${
+          index === activeSlide ? "w-6 sm:w-7 h-[0.3rem] bg-[#6f9483]" : "w-[0.3rem] h-[0.3rem] bg-[rgba(255,255,255,0.3)]"
+        }`}
+        onClick={() => goToSlide(index)}
+        aria-label={`Go to slide ${index + 1}`}
+      />
+    ))}
+  </div>
 
-          <div className="relative z-[4] mt-6">
-            {token ? (
-              <Link
-                to="/salons"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4d6c5c] to-[#6f9483] text-white font-bold text-base px-7 py-3.5 rounded-xl no-underline shadow-[0_8px_24px_rgba(77,108,92,0.35)] transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(77,108,92,0.45)]"
-              >
-                Explore Salons <ArrowRight size={18} />
-              </Link>
-            ) : (
-              <Link
-                to="/register"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4d6c5c] to-[#6f9483] text-white font-bold text-base px-7 py-3.5 rounded-xl no-underline shadow-[0_8px_24px_rgba(77,108,92,0.35)] transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(77,108,92,0.45)]"
-              >
-                Join EzyCut <ArrowRight size={18} />
-              </Link>
-            )}
-          </div>
-        </div>
-
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-9 flex gap-2 z-[4] max-md:right-5 max-md:left-auto max-md:translate-x-0 max-md:bottom-6">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              className={`rounded-full border-none cursor-pointer transition-all duration-300 p-0 ${
-                index === activeSlide ? "w-7 h-[0.3rem] bg-[#6f9483]" : "w-[0.3rem] h-[0.3rem] bg-[rgba(255,255,255,0.3)]"
-              }`}
-              onClick={() => goToSlide(index)}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[4] flex flex-col items-center gap-2 text-[rgba(244,244,245,0.6)]">
-          <span className="text-[0.6875rem] font-semibold tracking-[0.1em] uppercase">Scroll</span>
-          <div className="w-5 h-8 border-[1.5px] border-[rgba(244,244,245,0.35)] rounded-full flex justify-center pt-1.5">
-            <span className="w-[3px] h-[6px] bg-[#6f9483] rounded-full animate-[ezcScrollDot_1.8s_ease-in-out_infinite]" />
-          </div>
-        </div>
-      </section>
+  {/* Scroll indicator — hidden on very small screens to avoid crowding */}
+  <div className="hidden sm:flex absolute bottom-8 left-1/2 -translate-x-1/2 z-[4] flex-col items-center gap-2 text-[rgba(244,244,245,0.6)]">
+    <span className="text-[0.6875rem] font-semibold tracking-[0.1em] uppercase">Scroll</span>
+    <div className="w-5 h-8 border-[1.5px] border-[rgba(244,244,245,0.35)] rounded-full flex justify-center pt-1.5">
+      <span className="w-[3px] h-[6px] bg-[#6f9483] rounded-full animate-[ezcScrollDot_1.8s_ease-in-out_infinite]" />
+    </div>
+  </div>
+</section>
 
      {/* ============ WHY EZYCUT SECTION ============ */}
       <section
@@ -424,47 +430,52 @@ const Home = () => {
     }
   `}</style>
 
-  <div className="relative w-full max-w-[380px] aspect-square flex items-center justify-center">
+  <div className="relative w-full max-w-[380px] aspect-square flex items-center justify-center isolate">
     {/* teal backdrop circles */}
     <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(13,148,136,0.22)_0%,transparent_70%)]" />
-    <div className="absolute inset-[8%] rounded-full bg-gradient-to-br from-[#0f766e] to-[#134e4a]" />
-    <div className="absolute inset-[8%] rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(94,234,212,0.35)_0%,transparent_60%)]" />
 
-    {/* floating sparkle dots */}
-    <span
-      className="absolute top-[8%] left-[10%] w-3 h-3 rounded-full bg-[#5eead4]"
-      style={{ animation: "ezcSparkle 2.4s ease-in-out infinite" }}
-    />
-    <span
-      className="absolute top-[18%] right-[6%] w-2.5 h-2.5 rounded-full bg-[#2dd4bf]"
-      style={{ animation: "ezcSparkle 2s ease-in-out infinite 0.4s" }}
-    />
-    <span
-      className="absolute bottom-[10%] right-[10%] w-3 h-3 rounded-full bg-[#99f6e4]"
-      style={{ animation: "ezcSparkle 2.8s ease-in-out infinite 0.8s" }}
-    />
-    <span
-      className="absolute bottom-[16%] left-[6%] w-2 h-2 rounded-full bg-[#5eead4]"
-      style={{ animation: "ezcSparkle 2.2s ease-in-out infinite 1.1s" }}
-    />
+    {/* isolated blend group — teal base + photo blended together, contained */}
+    <div className="absolute inset-[8%] rounded-full overflow-hidden isolate">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0f766e] to-[#134e4a]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_35%_30%,rgba(94,234,212,0.35)_0%,transparent_60%)]" />
 
-    {/* barber photo — floats gently, white bg blended out via multiply */}
-    <div
-      className="relative w-[78%] h-[78%] rounded-full overflow-hidden flex items-end justify-center"
-      style={{ animation: "ezcFloatSlow 5s ease-in-out infinite" }}
-    >
-      <img
-        src={barberImg}
-        alt="EzyCut barber"
-        className="w-full h-full object-cover object-top scale-[1.15]"
-        style={{ mixBlendMode: "multiply" }}
-      />
+      {/* barber photo — floats gently, white bg blended into teal via multiply */}
+      <div
+        className="absolute inset-0 flex items-end justify-center"
+        style={{ animation: "ezcFloatSlow 5s ease-in-out infinite" }}
+      >
+        <img
+          src={barberImg}
+          alt="EzyCut barber"
+          className="w-full h-full object-cover object-top scale-[1.15] mix-blend-multiply"
+          style={{ height: "100%", width: "100%" }}
+        />
+      </div>
+
       {/* soft bottom fade so feet/edges blend into the teal circle */}
       <div className="absolute inset-0 rounded-full shadow-[inset_0_-30px_50px_-10px_rgba(4,47,46,0.35)] pointer-events-none" />
     </div>
 
+    {/* floating sparkle dots — sit outside the blend group so they stay crisp */}
+    <span
+      className="absolute top-[8%] left-[10%] w-3 h-3 rounded-full bg-[#5eead4] z-[2]"
+      style={{ animation: "ezcSparkle 2.4s ease-in-out infinite" }}
+    />
+    <span
+      className="absolute top-[18%] right-[6%] w-2.5 h-2.5 rounded-full bg-[#2dd4bf] z-[2]"
+      style={{ animation: "ezcSparkle 2s ease-in-out infinite 0.4s" }}
+    />
+    <span
+      className="absolute bottom-[10%] right-[10%] w-3 h-3 rounded-full bg-[#99f6e4] z-[2]"
+      style={{ animation: "ezcSparkle 2.8s ease-in-out infinite 0.8s" }}
+    />
+    <span
+      className="absolute bottom-[16%] left-[6%] w-2 h-2 rounded-full bg-[#5eead4] z-[2]"
+      style={{ animation: "ezcSparkle 2.2s ease-in-out infinite 1.1s" }}
+    />
+
     {/* thin ring accent */}
-    <div className="absolute inset-[8%] rounded-full border border-white/15 pointer-events-none" />
+    <div className="absolute inset-[8%] rounded-full border border-white/15 pointer-events-none z-[2]" />
   </div>
 </div>
     {/* Message box */}

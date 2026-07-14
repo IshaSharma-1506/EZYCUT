@@ -167,14 +167,14 @@
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
+  color: #374151; /* dark by default — mobile dropdown is always white/opaque */
   text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
 .ezc-nav-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: rgba(111, 148, 131, 0.1);
+  color: #4d6c5c;
 }
 
 
@@ -189,12 +189,12 @@
   font-weight: 500;
   text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease;
-  color: rgba(255, 255, 255, 0.85);
+  color: #374151; /* dark by default — mobile dropdown is always white/opaque */
 }
 
 .ezc-nav-link-sm:hover {
- background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: rgba(111, 148, 131, 0.1);
+  color: #4d6c5c;
 }
 
 .ezc-nav-link.active,
@@ -340,8 +340,8 @@
   background: transparent;
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
-  border-color: rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.85);
+  border-color: #e5e7eb;
+  color: #374151;
 }
 
 .ezc-logout-btn:hover {
@@ -402,6 +402,31 @@
 
 .ezc-navbar.scrolled .ezc-brand-cut {
   color: #4d6c5c;
+}
+
+/* Desktop unscrolled navbar — transparent bg, so links need to be white */
+@media (min-width: 768px) {
+  .ezc-navbar:not(.scrolled) .ezc-nav-link,
+  .ezc-navbar:not(.scrolled) .ezc-nav-link-sm {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .ezc-navbar:not(.scrolled) .ezc-nav-link:hover,
+  .ezc-navbar:not(.scrolled) .ezc-nav-link-sm:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+
+  .ezc-navbar:not(.scrolled) .ezc-logout-btn {
+    border-color: rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .ezc-navbar:not(.scrolled) .ezc-logout-btn:hover {
+    border-color: #6f9483;
+    background: rgba(111, 148, 131, 0.1);
+    color: #4d6c5c;
+  }
 }
 
 /* ===================================================== */
