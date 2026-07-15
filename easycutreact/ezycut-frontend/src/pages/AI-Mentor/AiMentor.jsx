@@ -13,6 +13,8 @@ import {
   ShieldCheck,
   Zap,
   ArrowRight,
+  Lock,
+  X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -85,6 +87,9 @@ const AiMentor = () => {
   const [results, setResults] = useState(null);
   const [loadingStep, setLoadingStep] = useState(0);
 
+  // UI-only state for the "coming soon" popup — no backend/logic impact
+  const [showPopup, setShowPopup] = useState(false);
+
   const canSubmit = faceShape && hairType && occasion && !loading;
 
   const loadingMessages = [
@@ -92,6 +97,8 @@ const AiMentor = () => {
     "Matching against style library...",
     "Fine-tuning recommendations...",
   ];
+
+  const triggerComingSoon = () => setShowPopup(true);
 
   const handleGetRecommendation = async () => {
     if (!canSubmit) return;
@@ -130,7 +137,36 @@ const AiMentor = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-68px)] bg-[#f7f9f8]">
+    <div className="min-h-[calc(100vh-68px)] bg-[#f7f9f8] relative">
+      {/* ============ COMING SOON POPUP ============ */}
+      {showPopup && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm animate-[ezcFadeUp_0.2s_ease_forwards]">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative border border-gray-100">
+            <button
+              onClick={() => setShowPopup(false)}
+              className="absolute top-3.5 right-3.5 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <X size={18} />
+            </button>
+            <div className="w-12 h-12 rounded-2xl bg-[#0d9488]/10 flex items-center justify-center mb-4">
+              <Lock size={20} className="text-[#0d9488]" />
+            </div>
+            <h3 className="text-base font-bold text-[#022525] mb-1.5">
+              This feature isn't available yet
+            </h3>
+            <p className="text-sm text-gray-500 leading-relaxed mb-5">
+              AI Mentor is currently unavailable to make your experience even better. We're working on it — check back soon!
+            </p>
+            <button
+              onClick={() => setShowPopup(false)}
+              className="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white font-semibold text-sm py-2.5 rounded-xl transition-colors"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* ============ HERO ============ */}
       <div className="relative overflow-hidden bg-gradient-to-br from-[#031715] via-[#042f2e] to-[#0f766e]">
         <div className="absolute inset-0 opacity-[0.07] bg-[radial-gradient(circle_at_20%_20%,white,transparent_45%)]" />
@@ -196,7 +232,16 @@ const AiMentor = () => {
 
       {/* ============ CONSULTATION PANEL ============ */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 -mt-8 sm:-mt-10 pb-10">
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-6 sm:p-8 animate-[ezcFadeUp_0.5s_ease_forwards]">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-6 sm:p-8 relative animate-[ezcFadeUp_0.5s_ease_forwards]">
+
+          {/* Coming Soon tag — no timer, just a static badge */}
+          <div className="flex justify-center mb-6">
+            <span className="inline-flex items-center gap-2 bg-[#0d9488]/10 text-[#0d9488] border border-[#0d9488]/20 text-xs font-bold px-4 py-2 rounded-full">
+              <Sparkles size={13} />
+              Coming Soon — we're building this to make your experience even better
+            </span>
+          </div>
+
           <div className="flex items-center gap-2.5 mb-6">
             <div className="w-9 h-9 rounded-full bg-[#0d9488]/10 flex items-center justify-center shrink-0">
               <User size={16} className="text-[#0d9488]" />
@@ -217,12 +262,8 @@ const AiMentor = () => {
                 <button
                   key={shape}
                   type="button"
-                  onClick={() => setFaceShape(shape)}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all duration-150 ${
-                    faceShape === shape
-                      ? "bg-[#0d9488] border-[#0d9488] text-white shadow-sm"
-                      : "bg-[#f7f9f8] border-gray-200 text-gray-600 hover:border-[#0d9488]/40"
-                  }`}
+                  onClick={triggerComingSoon}
+                  className="px-4 py-2 rounded-xl text-sm font-semibold border bg-[#f7f9f8] border-gray-200 text-gray-400 cursor-not-allowed opacity-60"
                 >
                   {shape}
                 </button>
@@ -240,12 +281,8 @@ const AiMentor = () => {
                 <button
                   key={type}
                   type="button"
-                  onClick={() => setHairType(type)}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all duration-150 ${
-                    hairType === type
-                      ? "bg-[#0d9488] border-[#0d9488] text-white shadow-sm"
-                      : "bg-[#f7f9f8] border-gray-200 text-gray-600 hover:border-[#0d9488]/40"
-                  }`}
+                  onClick={triggerComingSoon}
+                  className="px-4 py-2 rounded-xl text-sm font-semibold border bg-[#f7f9f8] border-gray-200 text-gray-400 cursor-not-allowed opacity-60"
                 >
                   {type}
                 </button>
@@ -263,12 +300,8 @@ const AiMentor = () => {
                 <button
                   key={label}
                   type="button"
-                  onClick={() => setOccasion(label)}
-                  className={`flex flex-col items-center gap-2 px-3 py-3.5 rounded-xl text-xs font-semibold border transition-all duration-150 ${
-                    occasion === label
-                      ? "bg-[#0d9488] border-[#0d9488] text-white shadow-sm"
-                      : "bg-[#f7f9f8] border-gray-200 text-gray-600 hover:border-[#0d9488]/40"
-                  }`}
+                  onClick={triggerComingSoon}
+                  className="flex flex-col items-center gap-2 px-3 py-3.5 rounded-xl text-xs font-semibold border bg-[#f7f9f8] border-gray-200 text-gray-400 cursor-not-allowed opacity-60"
                 >
                   <Icon size={17} />
                   {label}
@@ -284,37 +317,27 @@ const AiMentor = () => {
             </label>
             <textarea
               value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              onClick={triggerComingSoon}
+              onChange={() => {}}
+              disabled
               placeholder="e.g. I want something low-maintenance, I'm growing my hair out, I have a cowlick..."
               rows={3}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-[#f7f9f8] text-sm text-[#022525] outline-none transition-all focus:border-[#0d9488] focus:bg-white focus:ring-4 focus:ring-[#0d9488]/10 resize-none"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-[#f7f9f8] text-sm text-gray-400 outline-none resize-none cursor-not-allowed opacity-60"
             />
           </div>
 
           {/* Submit */}
           <button
             type="button"
-            onClick={handleGetRecommendation}
-            disabled={!canSubmit}
-            className="w-full inline-flex items-center justify-center gap-2 bg-[#0d9488] hover:bg-[#0f766e] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm py-3.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5"
+            onClick={triggerComingSoon}
+            className="w-full inline-flex items-center justify-center gap-2 bg-[#0d9488] text-white font-bold text-sm py-3.5 rounded-xl opacity-40 cursor-not-allowed"
           >
-            {loading ? (
-              <>
-                <Loader2 size={17} className="animate-spin" />
-                {loadingMessages[loadingStep]}
-              </>
-            ) : (
-              <>
-                <Wand2 size={17} />
-                Get My Recommendation
-              </>
-            )}
+            <Wand2 size={17} />
+            Get My Recommendation
           </button>
-          {!canSubmit && !loading && (
-            <p className="text-center text-xs text-gray-400 mt-2.5">
-              Pick a face shape, hair type, and occasion to continue.
-            </p>
-          )}
+          <p className="text-center text-xs text-gray-400 mt-2.5">
+            This feature is coming soon to make your experience even better.
+          </p>
         </div>
       </div>
 
